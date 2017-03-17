@@ -64,8 +64,27 @@
 			this.LoadCFG = new System.Windows.Forms.Button();
 			this.label13 = new System.Windows.Forms.Label();
 			this.SystemTray = new System.Windows.Forms.NotifyIcon(this.components);
+			this.SystemTrayContext = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.MenuStrip_VU1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.MenuStrip_VU2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.MenuStrip_ShowApp = new System.Windows.Forms.ToolStripMenuItem();
+			this.MenuStrip_QuitApp = new System.Windows.Forms.ToolStripMenuItem();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.label20 = new System.Windows.Forms.Label();
+			this.Timer_VU1 = new System.Windows.Forms.Timer(this.components);
+			this.Timer_VU2 = new System.Windows.Forms.Timer(this.components);
+			this.ArduinoInterface = new System.IO.Ports.SerialPort(this.components);
+			this.label14 = new System.Windows.Forms.Label();
+			this.ComPort = new System.Windows.Forms.TextBox();
+			this.ComStatus = new System.Windows.Forms.Label();
+			this.StartHidden = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			this.SystemTrayContext.SuspendLayout();
+			this.groupBox3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -83,7 +102,7 @@
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.Min_VU1);
 			this.groupBox1.Controls.Add(this.React_VU1);
-			this.groupBox1.Location = new System.Drawing.Point(12, 12);
+			this.groupBox1.Location = new System.Drawing.Point(164, 12);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(215, 165);
 			this.groupBox1.TabIndex = 0;
@@ -116,7 +135,7 @@
 			this.UpdateFreq_VU1.Name = "UpdateFreq_VU1";
 			this.UpdateFreq_VU1.Size = new System.Drawing.Size(41, 20);
 			this.UpdateFreq_VU1.TabIndex = 15;
-			this.UpdateFreq_VU1.Text = "0";
+			this.UpdateFreq_VU1.Text = "25";
 			this.UpdateFreq_VU1.TextChanged += new System.EventHandler(this.UpdateFreq_VU1_TextChanged);
 			// 
 			// label5
@@ -216,7 +235,8 @@
 			this.React_VU1.Items.AddRange(new object[] {
             "CPU",
             "RAM",
-            "GPU",
+            "GPU_TEMP",
+            "GPU_LOAD",
             "SOUND_LVL",
             "SOUND_VOL"});
 			this.React_VU1.Location = new System.Drawing.Point(86, 45);
@@ -240,7 +260,7 @@
 			this.groupBox2.Controls.Add(this.label9);
 			this.groupBox2.Controls.Add(this.Min_VU2);
 			this.groupBox2.Controls.Add(this.React_VU2);
-			this.groupBox2.Location = new System.Drawing.Point(233, 12);
+			this.groupBox2.Location = new System.Drawing.Point(385, 12);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(215, 165);
 			this.groupBox2.TabIndex = 13;
@@ -282,7 +302,7 @@
 			this.UpdateFreq_VU2.Name = "UpdateFreq_VU2";
 			this.UpdateFreq_VU2.Size = new System.Drawing.Size(41, 20);
 			this.UpdateFreq_VU2.TabIndex = 18;
-			this.UpdateFreq_VU2.Text = "0";
+			this.UpdateFreq_VU2.Text = "25";
 			this.UpdateFreq_VU2.TextChanged += new System.EventHandler(this.UpdateFreq_VU2_TextChanged);
 			// 
 			// label12
@@ -373,7 +393,8 @@
 			this.React_VU2.Items.AddRange(new object[] {
             "CPU",
             "RAM",
-            "GPU",
+            "GPU_TEMP",
+            "GPU_LOAD",
             "SOUND_LVL",
             "SOUND_VOL"});
 			this.React_VU2.Location = new System.Drawing.Point(86, 45);
@@ -384,19 +405,19 @@
 			// 
 			// HideWindow
 			// 
-			this.HideWindow.Location = new System.Drawing.Point(233, 183);
+			this.HideWindow.Location = new System.Drawing.Point(385, 183);
 			this.HideWindow.Name = "HideWindow";
-			this.HideWindow.Size = new System.Drawing.Size(79, 23);
+			this.HideWindow.Size = new System.Drawing.Size(60, 23);
 			this.HideWindow.TabIndex = 14;
-			this.HideWindow.Text = "Hide Window";
+			this.HideWindow.Text = "Hide";
 			this.HideWindow.UseVisualStyleBackColor = true;
 			this.HideWindow.Click += new System.EventHandler(this.HideWindow_Click);
 			// 
 			// Quit
 			// 
-			this.Quit.Location = new System.Drawing.Point(369, 183);
+			this.Quit.Location = new System.Drawing.Point(540, 183);
 			this.Quit.Name = "Quit";
-			this.Quit.Size = new System.Drawing.Size(79, 23);
+			this.Quit.Size = new System.Drawing.Size(60, 23);
 			this.Quit.TabIndex = 15;
 			this.Quit.Text = "Quit";
 			this.Quit.UseVisualStyleBackColor = true;
@@ -404,7 +425,7 @@
 			// 
 			// SaveCFG
 			// 
-			this.SaveCFG.Location = new System.Drawing.Point(116, 183);
+			this.SaveCFG.Location = new System.Drawing.Point(268, 183);
 			this.SaveCFG.Name = "SaveCFG";
 			this.SaveCFG.Size = new System.Drawing.Size(61, 23);
 			this.SaveCFG.TabIndex = 17;
@@ -414,7 +435,7 @@
 			// 
 			// LoadCFG
 			// 
-			this.LoadCFG.Location = new System.Drawing.Point(49, 183);
+			this.LoadCFG.Location = new System.Drawing.Point(201, 183);
 			this.LoadCFG.Name = "LoadCFG";
 			this.LoadCFG.Size = new System.Drawing.Size(61, 23);
 			this.LoadCFG.TabIndex = 18;
@@ -425,7 +446,7 @@
 			// label13
 			// 
 			this.label13.AutoSize = true;
-			this.label13.Location = new System.Drawing.Point(12, 188);
+			this.label13.Location = new System.Drawing.Point(167, 188);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(31, 13);
 			this.label13.TabIndex = 17;
@@ -437,15 +458,143 @@
 			this.SystemTray.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
 			this.SystemTray.BalloonTipText = "Hello!";
 			this.SystemTray.BalloonTipTitle = "VUtiful Joe";
+			this.SystemTray.ContextMenuStrip = this.SystemTrayContext;
 			this.SystemTray.Icon = ((System.Drawing.Icon)(resources.GetObject("SystemTray.Icon")));
-			this.SystemTray.Text = "SystemTray";
+			this.SystemTray.Text = "VUtiful Joe";
 			this.SystemTray.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.SystemTray_MouseDoubleClick);
+			// 
+			// SystemTrayContext
+			// 
+			this.SystemTrayContext.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.SystemTrayContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuStrip_VU1,
+            this.MenuStrip_VU2,
+            this.toolStripSeparator1,
+            this.MenuStrip_ShowApp,
+            this.MenuStrip_QuitApp});
+			this.SystemTrayContext.Name = "SystemTrayContext";
+			this.SystemTrayContext.Size = new System.Drawing.Size(151, 98);
+			// 
+			// MenuStrip_VU1
+			// 
+			this.MenuStrip_VU1.Enabled = false;
+			this.MenuStrip_VU1.Name = "MenuStrip_VU1";
+			this.MenuStrip_VU1.Size = new System.Drawing.Size(150, 22);
+			this.MenuStrip_VU1.Text = "VU1:";
+			// 
+			// MenuStrip_VU2
+			// 
+			this.MenuStrip_VU2.Enabled = false;
+			this.MenuStrip_VU2.Name = "MenuStrip_VU2";
+			this.MenuStrip_VU2.Size = new System.Drawing.Size(150, 22);
+			this.MenuStrip_VU2.Text = "VU2: ";
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(147, 6);
+			// 
+			// MenuStrip_ShowApp
+			// 
+			this.MenuStrip_ShowApp.Name = "MenuStrip_ShowApp";
+			this.MenuStrip_ShowApp.Size = new System.Drawing.Size(150, 22);
+			this.MenuStrip_ShowApp.Text = "Show Window";
+			this.MenuStrip_ShowApp.Click += new System.EventHandler(this.ShowWindow_Click);
+			// 
+			// MenuStrip_QuitApp
+			// 
+			this.MenuStrip_QuitApp.Name = "MenuStrip_QuitApp";
+			this.MenuStrip_QuitApp.Size = new System.Drawing.Size(150, 22);
+			this.MenuStrip_QuitApp.Text = "Quit";
+			this.MenuStrip_QuitApp.Click += new System.EventHandler(this.Quit_Click);
+			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.pictureBox1);
+			this.groupBox3.Controls.Add(this.label20);
+			this.groupBox3.Location = new System.Drawing.Point(12, 12);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(146, 165);
+			this.groupBox3.TabIndex = 20;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "VUtiful Joe";
+			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Location = new System.Drawing.Point(6, 19);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(128, 114);
+			this.pictureBox1.TabIndex = 4;
+			this.pictureBox1.TabStop = false;
+			this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Location = new System.Drawing.Point(2, 136);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(138, 26);
+			this.label20.TabIndex = 3;
+			this.label20.Text = "VUtiful Joe by Sam Morris\r\nArduino VU Meter Controller\r\n";
+			// 
+			// Timer_VU1
+			// 
+			this.Timer_VU1.Tick += new System.EventHandler(this.Timer_VU1_Tick);
+			// 
+			// Timer_VU2
+			// 
+			this.Timer_VU2.Tick += new System.EventHandler(this.Timer_VU2_Tick);
+			// 
+			// label14
+			// 
+			this.label14.AutoSize = true;
+			this.label14.Location = new System.Drawing.Point(15, 186);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(29, 13);
+			this.label14.TabIndex = 20;
+			this.label14.Text = "Port:";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// ComPort
+			// 
+			this.ComPort.Location = new System.Drawing.Point(50, 183);
+			this.ComPort.Name = "ComPort";
+			this.ComPort.Size = new System.Drawing.Size(39, 20);
+			this.ComPort.TabIndex = 20;
+			this.ComPort.Text = "COM1";
+			this.ComPort.TextChanged += new System.EventHandler(this.ComPort_TextChanged);
+			// 
+			// ComStatus
+			// 
+			this.ComStatus.AutoSize = true;
+			this.ComStatus.Location = new System.Drawing.Point(95, 186);
+			this.ComStatus.Name = "ComStatus";
+			this.ComStatus.Size = new System.Drawing.Size(0, 13);
+			this.ComStatus.TabIndex = 21;
+			this.ComStatus.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// StartHidden
+			// 
+			this.StartHidden.AutoSize = true;
+			this.StartHidden.Location = new System.Drawing.Point(448, 187);
+			this.StartHidden.Name = "StartHidden";
+			this.StartHidden.Size = new System.Drawing.Size(85, 17);
+			this.StartHidden.TabIndex = 20;
+			this.StartHidden.Text = "Start Hidden";
+			this.StartHidden.UseVisualStyleBackColor = true;
+			this.StartHidden.CheckedChanged += new System.EventHandler(this.StartHidden_CheckedChanged);
 			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(454, 212);
+			this.ClientSize = new System.Drawing.Size(612, 212);
+			this.Controls.Add(this.StartHidden);
+			this.Controls.Add(this.ComStatus);
+			this.Controls.Add(this.ComPort);
+			this.Controls.Add(this.label14);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.label13);
 			this.Controls.Add(this.LoadCFG);
 			this.Controls.Add(this.SaveCFG);
@@ -454,13 +603,19 @@
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "MainWindow";
 			this.Text = "VUtiful Joe";
+			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseDown);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
+			this.SystemTrayContext.ResumeLayout(false);
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -502,6 +657,22 @@
 		private System.Windows.Forms.Button UpdateVU1;
 		private System.Windows.Forms.NotifyIcon SystemTray;
 		private System.Windows.Forms.Button UpdateVU2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.ContextMenuStrip SystemTrayContext;
+		private System.Windows.Forms.ToolStripMenuItem MenuStrip_ShowApp;
+		private System.Windows.Forms.ToolStripMenuItem MenuStrip_QuitApp;
+		private System.Windows.Forms.Timer Timer_VU1;
+		private System.Windows.Forms.Timer Timer_VU2;
+		private System.IO.Ports.SerialPort ArduinoInterface;
+		private System.Windows.Forms.Label label14;
+		private System.Windows.Forms.TextBox ComPort;
+		private System.Windows.Forms.Label ComStatus;
+		private System.Windows.Forms.ToolStripMenuItem MenuStrip_VU1;
+		private System.Windows.Forms.ToolStripMenuItem MenuStrip_VU2;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.CheckBox StartHidden;
 
 
     }

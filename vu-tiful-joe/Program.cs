@@ -23,12 +23,21 @@ namespace vu_tiful_joe
 }
 
 public class Int32TextBox : TextBox {
+    public bool m_bAllowMinus = false;
 	protected override void OnKeyPress(KeyPressEventArgs e) {
 		base.OnKeyPress(e);
 
 		NumberFormatInfo fi = CultureInfo.CurrentCulture.NumberFormat;
 
 		string c = e.KeyChar.ToString();
+        if (!m_bAllowMinus) {
+            if (c == "-")
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+
 		if (char.IsDigit(c, 0))
 			return;
 
