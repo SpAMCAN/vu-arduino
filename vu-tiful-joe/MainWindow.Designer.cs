@@ -583,7 +583,6 @@
 			this.StartHidden.TabIndex = 20;
 			this.StartHidden.Text = "Start Hidden";
 			this.StartHidden.UseVisualStyleBackColor = true;
-			this.StartHidden.CheckedChanged += new System.EventHandler(this.StartHidden_CheckedChanged);
 			// 
 			// MainWindow
 			// 
@@ -607,6 +606,7 @@
 			this.MaximizeBox = false;
 			this.Name = "MainWindow";
 			this.Text = "VUtiful Joe";
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainWindow_Paint);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainWindow_MouseDown);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();

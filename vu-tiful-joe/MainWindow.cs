@@ -43,9 +43,9 @@ namespace vu_tiful_joe {
 				ComStatus.Text = "ERROR";
 			}
 
-			if (m_bStartHidden) {
+			/*if (m_bStartHidden) {
 				HideWindow_Click(null, null);
-			}
+			}*/
 		}
 
 		VUController[] m_VUMeters = new VUController[2];
@@ -108,7 +108,7 @@ namespace vu_tiful_joe {
 			ComPort.Text = m_Settings["ComPort"];
 			ComPort_TextChanged(null, null);
 			StartHidden.Checked = m_Settings["StartHidden"] != "0";
-			StartHidden_CheckedChanged(null, null);
+			m_bStartHidden = StartHidden.Checked;
 
 			Min_VU1.Text = m_Settings["Min_VU1"];
 			Min_VU1_TextChanged(null, null);
@@ -356,8 +356,12 @@ namespace vu_tiful_joe {
 		}
 
 		bool m_bStartHidden = false;
-		private void StartHidden_CheckedChanged(object sender, EventArgs e) {
-			m_bStartHidden = StartHidden.Checked;
+		bool m_bProgramStarted = false;
+		private void MainWindow_Paint(object sender, PaintEventArgs e) {
+			if (m_bStartHidden && !m_bProgramStarted) {
+				HideWindow_Click(null, null);
+				m_bProgramStarted = true;
+			}
 		}
 	}
 
