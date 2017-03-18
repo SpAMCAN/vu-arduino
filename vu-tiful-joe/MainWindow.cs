@@ -12,11 +12,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using OpenHardwareMonitor.Hardware;
+using System.Runtime.InteropServices;
 
 
 namespace vu_tiful_joe {
 	public partial class MainWindow : Form {
+
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		static extern bool AllocConsole();
+
 		public MainWindow() {
+			AllocConsole();
+
 			InitializeComponent();
 			StartPosition = FormStartPosition.CenterScreen;
 			for (int i = 0; i < m_VUMeters.Length; i++) {
@@ -28,14 +37,14 @@ namespace vu_tiful_joe {
 			React_VU1.SelectedIndex = 0;
 			React_VU2.SelectedIndex = 0;
 
+			ArduinoInterface.BaudRate = 9600;
+
 			m_Settings = LoadSettingsFile();
 			if (m_Settings == null) {
 				m_Settings = GenerateSettings();
 			}
 			InstallSettings();
 
-			ArduinoInterface.PortName = ComPort.Text;
-			ArduinoInterface.BaudRate = 9600;
 			try {
 				ArduinoInterface.Open();
 				ComStatus.Text = "OPEN";
@@ -106,7 +115,7 @@ namespace vu_tiful_joe {
 			}
 
 			ComPort.Text = m_Settings["ComPort"];
-			ComPort_TextChanged(null, null);
+			//ComPort_TextChanged(null, null);
 			StartHidden.Checked = m_Settings["StartHidden"] != "0";
 			m_bStartHidden = StartHidden.Checked;
 
@@ -259,7 +268,7 @@ namespace vu_tiful_joe {
 
 		private void LED_VU2_CheckedChanged(object sender, EventArgs e) {
 			m_VUMeters[1].m_bLED = LED_VU2.Checked;
-			TransmitToArduino(msgType_e.MSG_LED2, Convert.ToInt32(m_VUMeters[0].m_bLED));
+			TransmitToArduino(msgType_e.MSG_LED2, Convert.ToInt32(m_VUMeters[1].m_bLED));
 		}
 
 		private void UpdateFreq_VU2_TextChanged(object sender, EventArgs e) {
@@ -415,6 +424,20 @@ namespace vu_tiful_joe {
 
 		public VUMode_e m_eMode = VUMode_e.VOID;
 
+		int LogRemap(int value, int minInputValue, int maxInputValue, int minOutputValue, int maxOutputValue) {
+			/*if (value <= 1)
+				return 0;
+
+			double scaleFactor = 1;
+			double d = maxOutputValue * Math.Pow(Math.Log(value), scaleFactor) / Math.Pow(Math.Log(maxInputValue), scaleFactor);
+			return Convert.ToInt32(d);*/
+
+			double dB = Math.Log(1 + (value)) * 20.0f;
+			//dB *= maxOutputValue;
+			return Remap(Convert.ToInt32(dB), minInputValue, maxInputValue, minOutputValue, maxOutputValue);
+			return Convert.ToInt32(dB);
+		}
+
 		int Remap(int s, int a1, int a2, int b1, int b2) {
 			return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
 		}
@@ -452,7 +475,7 @@ namespace vu_tiful_joe {
 					break;
 				case VUMode_e.SOUND_LVL:
 					m_nVal = Remap(Convert.ToInt32(VideoPlayerController.AudioMeter.PeakValue * 100), 0, 100, m_nMinOutput, m_nMaxOutput);
-					break;
+					break;	
 				case VUMode_e.SOUND_VOL:
 					m_nVal = Remap(Convert.ToInt32(VideoPlayerController.AudioManager.GetMasterVolume()), 0, 100, m_nMinOutput, m_nMaxOutput);
 					break;
