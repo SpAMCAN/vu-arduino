@@ -24,7 +24,7 @@ namespace vu_tiful_joe {
 		static extern bool AllocConsole();
 
 		public MainWindow() {
-			AllocConsole();
+			// AllocConsole();
 
 			InitializeComponent();
 			StartPosition = FormStartPosition.CenterScreen;
@@ -106,6 +106,8 @@ namespace vu_tiful_joe {
 			m_newSettings.Add("Max_VU1", Max_VU1.Text);
 			m_newSettings.Add("Min_VU2", Min_VU2.Text);
 			m_newSettings.Add("Max_VU2", Max_VU2.Text);
+			m_newSettings.Add("EnableVolControl", Convert.ToInt32(EnableVolControl.Checked).ToString());
+			m_newSettings.Add("VolUpdateFreq", VolUpdateFreq.Text);
 			return m_newSettings;
 		}
 
@@ -138,6 +140,9 @@ namespace vu_tiful_joe {
 			LED_VU2.Checked = m_Settings["LED_VU2"] != "0";
 			m_VUMeters[1].SetEnumFromString(m_Settings["React_VU2"]);
 			React_VU2.SelectedIndex = (int)m_VUMeters[1].m_eMode - 1;
+
+			EnableVolControl.Checked = m_Settings["EnableVolControl"] != "0";
+			VolUpdateFreq.Text = m_Settings["VolUpdateFreq"];
 		}
 
 		void SaveSettings() {
@@ -168,7 +173,7 @@ namespace vu_tiful_joe {
 
 		private void Max_VU1_TextChanged(object sender, EventArgs e) {
 			try {
-				m_VUMeters[0].m_nMaxOutput = Clamp(Convert.ToInt32(Max_VU1.Text), m_VUMeters[0].m_nMinOutput, 100);
+				m_VUMeters[0].m_nMaxOutput = Clamp(Convert.ToInt32(Max_VU1.Text), m_VUMeters[0].m_nMinOutput, 255);
 				Max_VU1.Text = m_VUMeters[0].m_nMaxOutput.ToString();
 			} catch {
 				return;
@@ -259,7 +264,7 @@ namespace vu_tiful_joe {
 
 		private void Max_VU2_TextChanged(object sender, EventArgs e) {
 			try {
-				m_VUMeters[1].m_nMaxOutput = Clamp(Convert.ToInt32(Max_VU2.Text), m_VUMeters[1].m_nMinOutput, 100);
+				m_VUMeters[1].m_nMaxOutput = Clamp(Convert.ToInt32(Max_VU2.Text), m_VUMeters[1].m_nMinOutput, 255);
 				Max_VU2.Text = m_VUMeters[1].m_nMaxOutput.ToString();
 			} catch {
 				return;
@@ -360,8 +365,8 @@ namespace vu_tiful_joe {
 		}
 
 		private void pictureBox1_Click(object sender, EventArgs e) {
-			m_Settings = GenerateSettings();
-			SaveSettings();
+			//m_Settings = GenerateSettings();
+			//SaveSettings();
 		}
 
 		bool m_bStartHidden = false;
@@ -371,6 +376,29 @@ namespace vu_tiful_joe {
 				HideWindow_Click(null, null);
 				m_bProgramStarted = true;
 			}
+		}
+
+		bool m_bVolControl = true;
+		private void Timer_VOL_Tick(object sender, EventArgs e) {
+			if (!ArduinoInterface.IsOpen || !m_bVolControl) {
+				return;
+			}
+
+			if (ArduinoInterface.BytesToRead > 0) {
+				char[] carray = new char[ArduinoInterface.BytesToRead];
+				ArduinoInterface.Read(carray, 0, ArduinoInterface.BytesToRead);
+				int nVol = carray[carray.Length - 1];
+				VolumeVal.Text = nVol.ToString();
+				VideoPlayerController.AudioManager.SetMasterVolume(nVol);
+			}
+		}
+
+		private void EnableVolControl_CheckedChanged(object sender, EventArgs e) {
+			m_bVolControl = EnableVolControl.Checked;
+		}
+
+		private void VolUpdateFreq_TextChanged(object sender, EventArgs e) {
+			Timer_VOL.Interval = Clamp(Convert.ToInt32(VolUpdateFreq.Text), 1, 10000);
 		}
 	}
 

@@ -8,12 +8,12 @@ int VU2 = 6.;
 int VU2Val = 0;
 
 int LED1Pin = 2;
-int LED1State = 0;
+int LED1State = 1;
 int LED2Pin = 3;
-int LED2State = 0;
+int LED2State = 1;
 
 int VOLPin = 0;
-int VOLVal = 0;
+int VOLVal = 1000; // high value to force a send on init
 
 enum msgType_e {
       MSG_VOID,
@@ -61,20 +61,24 @@ void loop() {
 
   //VU1Val = 60;
   //VU2Val = 60;
-  analogWrite(VU1, VU1Val / 10);
-  analogWrite(VU2, VU2Val / 10);
+  analogWrite(VU1, VU1Val);
+  analogWrite(VU2, VU2Val);
 
-  digitalWrite(LED1Pin, LED1State * HIGH);
-  digitalWrite(LED2Pin, LED2State * HIGH);
+if(LED1State == 0) {
+ digitalWrite(LED1Pin, LOW);
+} else {
+  digitalWrite(LED1Pin, HIGH);
+}
+if(LED2State == 0) {
+ digitalWrite(LED2Pin, LOW);
+} else {
+  digitalWrite(LED2Pin, HIGH);
+}
 
   // Volume read
-  int newVal = analogRead(VOLPin);
+  int newVal = map(analogRead(VOLPin), 0, 1023, 0, 100);
   if(newVal != VOLVal) {
     VOLVal = newVal;
-    Serial.println(VOLVal);
+    Serial.write(VOLVal);
   }
- // Serial.print(VU1Val, DEC);
-  //Serial.print('\n');
- // Serial.print(VU2Val, DEC);
- // Serial.print('\n');
 }

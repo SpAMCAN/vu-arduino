@@ -80,11 +80,20 @@
 			this.ComPort = new System.Windows.Forms.TextBox();
 			this.ComStatus = new System.Windows.Forms.Label();
 			this.StartHidden = new System.Windows.Forms.CheckBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label15 = new System.Windows.Forms.Label();
+			this.VolumeVal = new System.Windows.Forms.Label();
+			this.VolUpdateFreq = new Int32TextBox();
+			this.label17 = new System.Windows.Forms.Label();
+			this.label18 = new System.Windows.Forms.Label();
+			this.EnableVolControl = new System.Windows.Forms.CheckBox();
+			this.Timer_VOL = new System.Windows.Forms.Timer(this.components);
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SystemTrayContext.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -415,7 +424,7 @@
 			// 
 			// Quit
 			// 
-			this.Quit.Location = new System.Drawing.Point(540, 183);
+			this.Quit.Location = new System.Drawing.Point(722, 183);
 			this.Quit.Name = "Quit";
 			this.Quit.Size = new System.Drawing.Size(60, 23);
 			this.Quit.TabIndex = 15;
@@ -577,18 +586,101 @@
 			// StartHidden
 			// 
 			this.StartHidden.AutoSize = true;
-			this.StartHidden.Location = new System.Drawing.Point(448, 187);
+			this.StartHidden.Location = new System.Drawing.Point(471, 187);
 			this.StartHidden.Name = "StartHidden";
 			this.StartHidden.Size = new System.Drawing.Size(85, 17);
 			this.StartHidden.TabIndex = 20;
 			this.StartHidden.Text = "Start Hidden";
 			this.StartHidden.UseVisualStyleBackColor = true;
 			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.label15);
+			this.groupBox4.Controls.Add(this.VolumeVal);
+			this.groupBox4.Controls.Add(this.VolUpdateFreq);
+			this.groupBox4.Controls.Add(this.label17);
+			this.groupBox4.Controls.Add(this.label18);
+			this.groupBox4.Controls.Add(this.EnableVolControl);
+			this.groupBox4.Location = new System.Drawing.Point(606, 12);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(176, 165);
+			this.groupBox4.TabIndex = 21;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Volume Control";
+			// 
+			// label15
+			// 
+			this.label15.AutoSize = true;
+			this.label15.Location = new System.Drawing.Point(133, 127);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(37, 13);
+			this.label15.TabIndex = 19;
+			this.label15.Text = "msecs";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// VolumeVal
+			// 
+			this.VolumeVal.AutoSize = true;
+			this.VolumeVal.Location = new System.Drawing.Point(83, 45);
+			this.VolumeVal.Name = "VolumeVal";
+			this.VolumeVal.Size = new System.Drawing.Size(29, 13);
+			this.VolumeVal.TabIndex = 12;
+			this.VolumeVal.Text = "VAR";
+			// 
+			// VolUpdateFreq
+			// 
+			this.VolUpdateFreq.Location = new System.Drawing.Point(86, 124);
+			this.VolUpdateFreq.Name = "VolUpdateFreq";
+			this.VolUpdateFreq.Size = new System.Drawing.Size(41, 20);
+			this.VolUpdateFreq.TabIndex = 18;
+			this.VolUpdateFreq.Text = "25";
+			this.VolUpdateFreq.TextChanged += new System.EventHandler(this.VolUpdateFreq_TextChanged);
+			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(6, 127);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(74, 13);
+			this.label17.TabIndex = 17;
+			this.label17.Text = "Update every:";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label18
+			// 
+			this.label18.AutoSize = true;
+			this.label18.Location = new System.Drawing.Point(6, 45);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(74, 13);
+			this.label18.TabIndex = 11;
+			this.label18.Text = "Current Value:";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// EnableVolControl
+			// 
+			this.EnableVolControl.AutoSize = true;
+			this.EnableVolControl.Checked = true;
+			this.EnableVolControl.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.EnableVolControl.Location = new System.Drawing.Point(9, 22);
+			this.EnableVolControl.Name = "EnableVolControl";
+			this.EnableVolControl.Size = new System.Drawing.Size(133, 17);
+			this.EnableVolControl.TabIndex = 9;
+			this.EnableVolControl.Text = "Enable Volume Control";
+			this.EnableVolControl.UseVisualStyleBackColor = true;
+			this.EnableVolControl.CheckedChanged += new System.EventHandler(this.EnableVolControl_CheckedChanged);
+			// 
+			// Timer_VOL
+			// 
+			this.Timer_VOL.Enabled = true;
+			this.Timer_VOL.Interval = 25;
+			this.Timer_VOL.Tick += new System.EventHandler(this.Timer_VOL_Tick);
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(612, 212);
+			this.ClientSize = new System.Drawing.Size(795, 212);
+			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.StartHidden);
 			this.Controls.Add(this.ComStatus);
 			this.Controls.Add(this.ComPort);
@@ -616,6 +708,8 @@
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -673,6 +767,14 @@
 		private System.Windows.Forms.ToolStripMenuItem MenuStrip_VU2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.CheckBox StartHidden;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label VolumeVal;
+        private Int32TextBox VolUpdateFreq;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox EnableVolControl;
+        private System.Windows.Forms.Timer Timer_VOL;
 
 
     }
