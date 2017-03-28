@@ -424,18 +424,14 @@ namespace vu_tiful_joe {
 
 		public VUMode_e m_eMode = VUMode_e.VOID;
 
+		static float M_E = 2.7182818284590452354f;
+
 		int LogRemap(int value, int minInputValue, int maxInputValue, int minOutputValue, int maxOutputValue) {
-			/*if (value <= 1)
-				return 0;
-
-			double scaleFactor = 1;
-			double d = maxOutputValue * Math.Pow(Math.Log(value), scaleFactor) / Math.Pow(Math.Log(maxInputValue), scaleFactor);
-			return Convert.ToInt32(d);*/
-
-			double dB = Math.Log(1 + (value)) * 20.0f;
-			//dB *= maxOutputValue;
-			return Remap(Convert.ToInt32(dB), minInputValue, maxInputValue, minOutputValue, maxOutputValue);
-			return Convert.ToInt32(dB);
+			double b = Math.Log(maxOutputValue / minOutputValue) / (maxInputValue - minInputValue);
+			double a = minOutputValue / Math.Pow(M_E, b * minInputValue);
+			double exp = Math.Pow(M_E, (value * b)); 
+			double ret = a * exp;
+			return Convert.ToInt32(Math.Round(ret));
 		}
 
 		int Remap(int s, int a1, int a2, int b1, int b2) {
@@ -474,10 +470,10 @@ namespace vu_tiful_joe {
 					m_nVal = Remap(GetGPU(SensorType.Load, "GPU Core"), 0, 100, m_nMinOutput, m_nMaxOutput);
 					break;
 				case VUMode_e.SOUND_LVL:
-					m_nVal = Remap(Convert.ToInt32(VideoPlayerController.AudioMeter.PeakValue * 100), 0, 100, m_nMinOutput, m_nMaxOutput);
+					m_nVal = LogRemap(Convert.ToInt32(VideoPlayerController.AudioMeter.PeakValue * 100) + 1, 1, 101, m_nMinOutput + 1, m_nMaxOutput + 1) - 1;
 					break;	
 				case VUMode_e.SOUND_VOL:
-					m_nVal = Remap(Convert.ToInt32(VideoPlayerController.AudioManager.GetMasterVolume()), 0, 100, m_nMinOutput, m_nMaxOutput);
+					m_nVal = LogRemap(Convert.ToInt32(VideoPlayerController.AudioManager.GetMasterVolume()) + 1, 1, 101, m_nMinOutput + 1, m_nMaxOutput + 1) - 1;
 					break;
 			}
 
