@@ -12,6 +12,9 @@ int LED1State = 0;
 int LED2Pin = 3;
 int LED2State = 0;
 
+int VOLPin = 0;
+int VOLVal = 0;
+
 enum msgType_e {
       MSG_VOID,
       MSG_VU1,
@@ -63,6 +66,13 @@ void loop() {
 
   digitalWrite(LED1Pin, LED1State * HIGH);
   digitalWrite(LED2Pin, LED2State * HIGH);
+
+  // Volume read
+  int newVal = analogRead(VOLPin);
+  if(newVal != VOLVal) {
+    VOLVal = newVal;
+    Serial.println(VOLVal);
+  }
  // Serial.print(VU1Val, DEC);
   //Serial.print('\n');
  // Serial.print(VU2Val, DEC);
